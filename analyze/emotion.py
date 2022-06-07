@@ -32,7 +32,7 @@ def tweet_to_emotion():
 	emotion_analyzer = MLAsk('-d /usr/lib/x86_64-linux-gnu/mecab/dic/mecab-ipadic-neologd')	
 
 	#データの読み込み
-	tweet_data_path = glob.glob('data/*.json')
+	tweet_data_path = glob.glob('../data/*.json')
 	tweet_data = json.load(open(tweet_data_path[0],'r'))
 
 	#分析
