@@ -1,4 +1,4 @@
-# Tweet_Emotion_Application
+ # Tweet_Emotion_Application
 Multi Media Engineering Exercise
 
 ## 準備
@@ -15,7 +15,7 @@ echo `mecab-config --dicdir`"/mecab-ipadic-neologd"
 ```
 
 ## 実行
-###例
+### 例
 ```
 cd example
 bash run.sh
