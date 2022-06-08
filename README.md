@@ -32,6 +32,8 @@ echo `mecab-config --dicdir`"/mecab-ipadic-neologd"
 ## 実行
 ### 例
 ```
-cd example
-bash run.sh
+cd analyze
+pyrhon3 emotion.py
 ```
+(補足)
+* data内にある最新(?)のjsonファイルのツイートを分析
