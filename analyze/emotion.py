@@ -33,7 +33,7 @@ def tweet_to_emotion():
 
 	#データの読み込み
 	tweet_data_path = glob.glob('../data/*.json')
-	tweet_data = json.load(open(tweet_data_path[0],'r'))
+	tweet_data = json.load(open(tweet_data_path[-1],'r'))
 
 	#分析
 	emotion_dict = analyze_emotion(tweet_data, emotion_analyzer)
