@@ -37,3 +37,4 @@ pyrhon3 emotion.py
 ```
 (補足)
 * data内にある最新(?)のjsonファイルのツイートを分析
+* analyze内にresult.jsonが生成される
