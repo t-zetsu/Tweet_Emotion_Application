@@ -3,7 +3,20 @@ Multi Media Engineering Exercise
 
 ## 準備
 ### 環境
-Dockerコンテナを立ち上げる
+Dockerコンテナ
+1. Dockerfileからイメージを作成
+```
+docker build -t [IMAGE_NAME] .
+```
+2. イメージからコンテナを立ち上げる
+```
+docker run -it -d --ipc=host -v [WORK_DIR] --name [CONTAINER_NAME] [IMAGE_NAME] /bin/bash
+```
+3. コンテナを有効化
+```
+docker exec -it [CONTAINER_NAME] bash
+```
+(補足)pythonのライブラリはrequirements.txtに記載
 ### 辞書のダウンロード
 形態素解析エンジンMeCabと共に使う単語分かち書き辞書[mecab-ipadic-NEologd](https://github.com/neologd/mecab-ipadic-neologd)のダウンロードが必要
 ```
