@@ -24,7 +24,7 @@ def getTrends(woeid):
 def getTweets(keyword):
 
     print(keyword)
-    tweets = tweepy.Cursor(api.search_tweets, q = keyword, lang = 'ja').items(2)
+    tweets = tweepy.Cursor(api.search_tweets, q = keyword, lang = 'ja').items(200)
 
     return tweets
 
@@ -38,7 +38,7 @@ trends = getTrends(woeid)
 keywords = []
 for trend in trends["trends"] :
     keywords.append(str(trend['name']))
-keywords = keywords[2:12]
+keywords = keywords[0:10]
 
 path = './data/currentTrend.json'
 file = codecs.open(path, 'a', 'utf-8')
@@ -56,7 +56,9 @@ for keyword in keywords :
     tweets = getTweets(keyword)
     for tweet in tweets :
         text = str(tweet.text)
+        # url = str(tweet.entities['urls'][0]['url'])
         cT.setdefault(keyword,[]).append(text)
+        # cT.setdefault(keyword,[]).append(url)
     if tag : 
         ptext = pT.get(keyword)
         print(ptext)
@@ -68,4 +70,3 @@ for keyword in keywords :
 file.seek(0)
 file.truncate()
 dict = json.dump(cT, file, ensure_ascii=False)
-
