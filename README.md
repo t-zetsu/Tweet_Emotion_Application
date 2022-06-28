@@ -29,12 +29,23 @@ echo `mecab-config --dicdir`"/mecab-ipadic-neologd"
 # echo `mecab-config --dicdir`"/mecab-ipadic-neologd"
 ```
 
-## 実行
+## 実行（舌）
 ### 例
 ```
 cd analyze
-pyrhon3 emotion.py
+python3 emotion.py
 ```
 (補足)
 * data内にある最新(?)のjsonファイルのツイートを分析
 * analyze内にresult.jsonが生成される
+
+## 実行（加藤）
+### 例
+```
+python3 manage.py runserver
+```
+(補足)
+* django 4.0.4 にて実装（ ver.4 以上の django の必要あり）
+* サーバが立つ
+* `http://127.0.0.1:8000/twemotion/` でホーム画面にアクセス
+* トレンドの取得と感情分析は，15分ごとに `twemotion.views.py` にて行われる
