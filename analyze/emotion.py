@@ -17,36 +17,38 @@ def remove(str):
 	return str
 
 def tweet_to_emotion(tweet_data, emotion_analyzer):
-	if args.emoji:
+	if args.no_emoji:
 		emoji_dic = json.load(open("../data/emoji/emoji.json","r"))
 		emoji_pattern = re.compile('|'.join(emoji_dic.keys()))
 	emotion_dic = {}
 	for key in tweet_data: #各トレンド
 		emotion_dic[key] = []
 		for tweet in tweet_data[key]: #各ツイート
+			text = tweet["tweet"]
 			#余計な文字列の除去
-			tweet = remove(tweet)
+			text = remove(text)
 			#絵文字変換
-			if args.emoji:
-				tweet = emoji_pattern.sub(lambda x: emoji_dic[x.group()], tweet)
+			if args.no_emoji:
+				text = emoji_pattern.sub(lambda x: emoji_dic[x.group()], text)
 			#感情分析
-			result = emotion_analyzer.analyze(tweet)
+			result = emotion_analyzer.analyze(text)
 			if result["emotion"]:
 				emotion = list(result["emotion"])
 			else:
 				emotion = [str(result["emotion"])] #None
-			emotion_dic[key].append({"tweet":tweet, "emotion":emotion})
+			tweet["emotion"] = emotion
+			emotion_dic[key].append(tweet)
 	return emotion_dic
 
 def get_args():
 	parser = argparse.ArgumentParser()
-	parser.add_argument('--emoji', action='store_true', help="Converting emoji into emotional expressions")
-	parser.add_argument('--input', default='../data/currentTrend.json', type=str, help='Input file for tweet data')
+	parser.add_argument('--no_emoji', action='store_false', help="Not converting emoji into emotional expressions")
+	parser.add_argument('--input', default='../data/tweets/currentTrend.json', type=str, help='Input file for tweet data')
 	parser.add_argument('--output', default='../data/outputs/currentEmotion.json', type=str, help='Output file for tweet data')
 
 	return parser.parse_args()
 
-def main():
+def emotion_analysis():
 	#モデルの読み込み
 	emotion_analyzer = MLAsk('-d /usr/lib/x86_64-linux-gnu/mecab/dic/mecab-ipadic-neologd')	
 
@@ -66,4 +68,4 @@ def main():
 
 if __name__ == "__main__":
 	args = get_args()
-	main()
+	emotion_analysis()
