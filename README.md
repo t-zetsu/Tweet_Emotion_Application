@@ -9,7 +9,7 @@ docker build -t [IMAGE_NAME] .
 ```
 2. イメージからコンテナを立ち上げる
 ```
-docker run -it -d --ipc=host -v [WORK_DIR] --name [CONTAINER_NAME] [IMAGE_NAME] /bin/bash
+docker run -it -d --ipc=host -v work --name [CONTAINER_NAME] [IMAGE_NAME] /bin/bash
 ```
 3. コンテナを有効化
 ```
@@ -36,8 +36,14 @@ cd analyze
 python3 emotion.py
 ```
 (補足)
-* data内にある最新(?)のjsonファイルのツイートを分析
-* analyze内にresult.jsonが生成される
+* data/tweets/にあるjsonファイル(デフォルトではexampleTrend.json)のツイートを分析
+* data/outputs/にjsonファイルが出力される(デフォルトではexampleEmotion.json)
+* オプションは次の通り
+```
+--emoji  # 絵文字変換を行う
+--input  # 入力ファイルを指定
+--output # 出力ファイルを指定
+```
 
 ## 実行（加藤）
 ### 例
