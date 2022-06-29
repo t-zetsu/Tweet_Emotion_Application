@@ -83,6 +83,7 @@ def main():
         file.seek(0)
         file.truncate()
         dict = json.dump(cT, file, ensure_ascii=False)
+        
 
 
 if __name__ == "__main__":
