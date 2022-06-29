@@ -11,7 +11,7 @@ auth = tweepy.OAuth1UserHandler(
     "SM4ByRgeds4pWLJnsIY5fY79NRh0woG07zQBkgnOITY3j"
 )
 
-#publicすればコメントアウトを除去
+#publicすればコメントアウトを除去する
 # auth = tweepy.OAuth1UserHandler(
 #    consumer_key, consumer_secret, access_token, access_token_secret
 # )
