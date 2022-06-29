@@ -55,7 +55,7 @@ def getTrendingTweets():
 
     for keyword in keywords:
         # 各トレンドに対して、tweetを200個取得
-        tweets = getTweets(keyword, 2)
+        tweets = getTweets(keyword, 200)
         # 取得したtweetのテキストとurlをcTに保存
         for tweet in tweets:
             text = str(tweet.text)
