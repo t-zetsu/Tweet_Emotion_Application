@@ -49,3 +49,15 @@ python3 manage.py runserver
 * サーバが立つ
 * `http://127.0.0.1:8000/twemotion/` でホーム画面にアクセス
 * トレンドの取得と感情分析は，15分ごとに `twemotion.views.py` にて行われる
+
+## 実行（ショウ）
+### 例
+```
+cd analyze
+python3 getTrendingTweets.py
+```
+(補足)
+* 実行する時点で Top10 のトレンドに関するツイートを各々200個取得
+* 取得したツイートは data/currentTrend.json に保存
+* 実行して取得したトレンドはcurrentTrend.jsonに同じトレンドが存在すれば、取得したツイートを同トレンド下に追加
+* currentTrend.jsonは常に最後に実行した時点の Top10 のトレンドしか保存しない
