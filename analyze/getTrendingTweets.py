@@ -3,12 +3,20 @@ import json
 import os
 import tweepy
 
+#publicすれば削除
 auth = tweepy.OAuth1UserHandler(
     "iUzLnPTJVekOxQT4WqwSqBnkB",
     "KeFVqzN4o5VcsSx240hanZuBuIsM0naPPU3TJJnWblkcJXu2fU",
     "1529282243629178882-3QUmtyOUud6j40tB5uskY4DphF0qGP",
     "SM4ByRgeds4pWLJnsIY5fY79NRh0woG07zQBkgnOITY3j"
 )
+
+#publicすればコメントアウトを除去
+# auth = tweepy.OAuth1UserHandler(
+#    consumer_key, consumer_secret, access_token, access_token_secret
+# )
+
+
 api = tweepy.API(auth)
 woeid = {
     "Japan": 23424856
@@ -38,7 +46,7 @@ def getTrendingTweets():
 
     # この時点でtop10のトレンドを取得する
     keywords = []
-    for trend in trends["trends"]:
+    for trend in trends['trends']:
         keywords.append(str(trend['name']))
     keywords = keywords[0:10]
 
@@ -61,15 +69,15 @@ def getTrendingTweets():
             text = str(tweet.text)
             tweetid = str(tweet.id)
             url = 'https://twitter.com/x/status/' + tweetid
-            d = {text: url}
-            cT.setdefault(keyword, []).append(d)
+            dict = {'tweet': text, 'url': url}
+            cT.setdefault(keyword, []).append(dict)
         # cTとpTの内容を比較し、もし同じトレンドがあればcTにjoin
         if tag:
             ptext = pT.get(keyword)
-            print(ptext)
+            #print(ptext)
             if ptext:
                 for tweet in ptext:
-                    cT.setdefault(keyword, []).append(text)
+                    cT.setdefault(keyword, []).append(tweet)
 
     return cT
 
@@ -83,7 +91,6 @@ def main():
         file.seek(0)
         file.truncate()
         dict = json.dump(cT, file, ensure_ascii=False)
-        
 
 
 if __name__ == "__main__":
