@@ -1,4 +1,5 @@
 mecab-python3
 pymlask
 django
+
 tweepy
