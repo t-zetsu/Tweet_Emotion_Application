@@ -36,8 +36,8 @@ cd analyze
 python3 emotion.py
 ```
 (補足)
-* data内にあるjsonファイル(デフォルトではcurrentTrend.json)のツイートを分析
-* result/にjsonファイルが出力される(デフォルトではcurrentEmotion.json)
+* data/tweets/にあるjsonファイル(デフォルトではexampleTrend.json)のツイートを分析
+* data/outputs/にjsonファイルが出力される(デフォルトではexampleEmotion.json)
 * オプションは次の通り
 ```
 --emoji  # 絵文字変換を行う
