@@ -50,7 +50,7 @@ def getTrendingTweets():
         keywords.append(str(trend['name']))
     keywords = keywords[0:10]
 
-    path = './data/currentTrend.json'
+    path = './data/tweets/currentTrend.json'
     file = codecs.open(path, 'a', 'utf-8')
 
     cT = {}
@@ -63,7 +63,7 @@ def getTrendingTweets():
 
     for keyword in keywords:
         # 各トレンドに対して、tweetを200個取得
-        tweets = getTweets(keyword, 200)
+        tweets = getTweets(keyword, 10)
         # 取得したtweetのテキストとurlをcTに保存
         for tweet in tweets:
             text = str(tweet.text)
@@ -87,7 +87,7 @@ def main():
     cT = getTrendingTweets()
 
     # currentTrend.jsonのデータを消して、cTのデータをcurrentTrend.jsonに書き込む
-    with codecs.open("./data/currentTrend.json", 'a', 'utf-8') as file:
+    with codecs.open("./data/tweets/currentTrend.json", 'a', 'utf-8') as file:
         file.seek(0)
         file.truncate()
         dict = json.dump(cT, file, ensure_ascii=False)
