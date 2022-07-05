@@ -7,7 +7,6 @@
     <meta charset="UTF-8">
     <title>index.html</title>
     <link rel="stylesheet" href="{%static 'css/sty.css' %}" type="text/css">
-<!--     <link rel="stylesheet" href="style.css" type="text/css"> -->
   </head>
 
   <body>
@@ -21,7 +20,7 @@
             <summary><font color={{content.color}}>{{content.japanese}}: {{content.point}} &#037;</font></summary>
             {% for tweet in content.tweet %}
               <ul>
-                <li>{{tweet}}</li>
+                <li><a href={{tweet.url}}>{{tweet.content}}</a></li>
               </ul>
             {% endfor %}
           </details>
