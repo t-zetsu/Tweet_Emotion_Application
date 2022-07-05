@@ -64,3 +64,15 @@ python3 getTrendingTweets.py
 * 取得したツイートは data/currentTrend.json に保存
 * 実行して取得したトレンドはcurrentTrend.jsonに同じトレンドが存在すれば、取得したツイートを同トレンド下に追加
 * currentTrend.jsonは常に最後に実行した時点の Top10 のトレンドしか保存しない
+
+## 実行（全体）
+### 例
+```
+python3 manage.py runserver
+```
+(補足)
+emotion.pyに以下の変更を加えないと動かなかった（加藤の環境）
+* main関数の内容を`def main()`にし，main関数で`def main()`を呼び出し
+* `args`がグローバル変数として機能しなかったので，他のそれぞれの関数の引数に`args`を追加
+* `get\_args()`の`return parser.parse\_args()`を`return parser.parse_args(args=[])`に
+* Djangoの仕様上，emotion.py含め絶対パスで指定しないといけないっぽいので，emotion.py中のパスで`../data`から始まるものを`data`から始まるように変更
