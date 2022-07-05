@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
   <head>
@@ -5,21 +6,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta charset="UTF-8">
     <title>index.html</title>
-    <style>
-      body {
-        font-family: sans-serif;
-      }
-    </style>
+    <link rel="stylesheet" href="{%static 'css/sty.css' %}" type="text/css">
+<!--     <link rel="stylesheet" href="style.css" type="text/css"> -->
   </head>
 
   <body>
-    <font size="4"><a href="http://127.0.0.1:8000/twemotion/">ホーム</a></font>
+    <a href="http://127.0.0.1:8000/twemotion/"><img src="/media/home.png" alt="ホーム" title="ホーム" style="width:160px" text-align: right></a>
+    <p align="right"><a href={{none_mode.url}} class="btn_none_mode">{{none_mode.alt}}</a></p>
     <hr>
-    <b><font size="5">{{ name }}</font></b>
-    <ul>
-      {% for em, point in analysis %}
-        <!-- <li><font color=emcolor.{{ em }}>{{ em }}</font>: {{ point }}&#037; : {{ emcolor.em }} -->
-        <li>{{ em }}: {{ point }}&#037;</li>
-      {% endfor %}      
+    <p class="frame">
+      <b><font size="5">{{ name }}</font></b>
+        {% for em, content in result.items %}
+          <details>
+            <summary><font color={{content.color}}>{{content.japanese}}: {{content.point}} &#037;</font></summary>
+            {% for tweet in content.tweet %}
+              <ul>
+                <li>{{tweet}}</li>
+              </ul>
+            {% endfor %}
+          </details>
+        {% endfor %}
+    </p>
   </body>
 </html>
