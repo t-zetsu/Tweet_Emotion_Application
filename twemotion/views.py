@@ -2,7 +2,7 @@
 #from django.template import loader
 from django.shortcuts import render
 from analyze.emotion import main as emotion_analysis
-from analyze.getTrend import main as get_trend
+from analyze.getTrendingTweets import main as get_trend
 import json
 import time
 
@@ -20,7 +20,7 @@ def index(request):
             f_write.write(str(NowTime))
     
     #感情分析結果を読み込み
-    with open("analyze/result.json", "r") as json_open:
+    with open("data/outputs/currentEmotion.json", "r") as json_open:
         json_load = json.load(json_open)
     json_load = {key.replace("#",""):value for key, value in json_load.items()}
     print(json_load)
@@ -32,76 +32,6 @@ def index(request):
     
 
 def trend(request):
-    #分析結果＆その他各感情の情報
-    emotion_dic = {
-        "iya":{
-            "color":"#9400d3", #紫
-            "japanese":"嫌",
-            "tweet":[],
-            "point":0
-        },
-        "yorokobi":{
-            "color":"#ff8c00", #オレンジ
-            "japanese":"喜",
-            "tweet":[],
-            "point":0
-        },
-        "kowa":{
-            "color":"#000080",  #紺
-            "japanese":"怖",
-            "tweet":[],
-            "point":0
-        },
-        "yasu":{
-            "color":"#008000", #緑
-            "japanese":"安",
-            "tweet":[],
-            "point":0
-        },
-        "suki":{
-            "color":"#ff69b4", #ピンク
-            "japanese":"好",
-            "tweet":[],
-            "point":0
-        },
-        "aware":{
-            "color":"#4682b4", # グレーブルー
-            "japanese":"哀",
-            "tweet":[],
-            "point":0
-        },
-        "ikari":{
-            "color":"#800000", #紅
-            "japanese":"怒",
-            "tweet":[],
-            "point":0
-        },
-        "odoroki":{
-            "color":"#daa520", #金
-            "japanese":"驚",
-            "tweet":[],
-            "point":0
-        },
-        "takaburi":{
-            "color":"#ff0000", #赤
-            "japanese":"昂",
-            "tweet":[],
-            "point":0
-        },
-        "haji":{
-            "color":"#c71585", #ピンクパープル
-            "japanese":"恥",
-            "tweet":[],
-            "point":0
-        },
-        "None":{
-            "color":"#696969", #グレー
-            "japanese":"無",
-            "tweet":[],
-            "point":0
-        }
-    }
-    
     #URLパラメータを取得
     none = False
     if 't' in request.GET: #トレンド名
@@ -110,13 +40,15 @@ def trend(request):
         none = request.GET['none']=='1'
         
     #感情分析結果を集約
-    with open("analyze/result.json", "r") as json_open: #分析結果読み込み
-        json_load = json.load(json_open)
-    json_load = {key.replace("#",""):value for key, value in json_load.items()}
-    for tweet in json_load[t]:
+    with open("config/emotion_display.json", "r") as color_json_open: #各感情に関する設定ファイル読み込み
+        emotion_dic = json.load(color_json_open)
+    with open("data/outputs/currentEmotion.json", "r") as analysis_json_open: #分析結果読み込み
+        analysis_result = json.load(analysis_json_open)
+    analysis_result = {key.replace("#",""):value for key, value in analysis_result.items()}
+    for tweet in analysis_result[t]:
         for em in tweet["emotion"]:
-            emotion_dic[em]["point"] += 100 / (len(json_load[t]) * len(tweet["emotion"])) #100 / (ツイート数 * 感情数)をインクリメント
-            emotion_dic[em]["tweet"].append(tweet["tweet"]) #該当ツイートを追加
+            emotion_dic[em]["point"] += 100 / (len(analysis_result[t]) * len(tweet["emotion"])) #100 / (ツイート数 * 感情数)をインクリメント
+            emotion_dic[em]["tweet"].append({"content":tweet["tweet"], "url":tweet["url"]}) #該当ツイートを追加
 
     #ポイントの正規化
     if (not(none)): #Noneを表示しない場合
@@ -137,8 +69,6 @@ def trend(request):
     none_mode = {}
     none_mode["url"] = "http://127.0.0.1:8000/twemotion/trend/?t=" + t #埋め込みURL
     none_mode["url"] += "&none=0" if none else "&none=1"
-    none_mode["img_src"] = "/media/none_" #画像ファイル
-    none_mode["img_src"] += "hide.png" if none else "show.png"
     none_mode["alt"] = "「無」を表示" #altの内容
     none_mode["alt"] += "しない" if none else "する"
     
