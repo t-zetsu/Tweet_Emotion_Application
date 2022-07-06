@@ -16,9 +16,10 @@ def remove(str):
 	str = re.sub("\n", "", str) 
 	return str
 
-def tweet_to_emotion(tweet_data, emotion_analyzer):
+def tweet_to_emotion(tweet_data, emotion_analyzer, args):
 	if args.no_emoji:
-		emoji_dic = json.load(open("../data/emoji/emoji.json","r"))
+# 		emoji_dic = json.load(open("../data/emoji/emoji.json","r"))
+		emoji_dic = json.load(open("data/emoji/emoji.json","r"))
 		emoji_pattern = re.compile('|'.join(emoji_dic.keys()))
 	emotion_dic = {}
 	for key in tweet_data: #各トレンド
@@ -43,14 +44,16 @@ def tweet_to_emotion(tweet_data, emotion_analyzer):
 def get_args():
 	parser = argparse.ArgumentParser()
 	parser.add_argument('--no_emoji', action='store_false', help="Not converting emoji into emotional expressions")
-	parser.add_argument('--input', default='../data/tweets/currentTrend.json', type=str, help='Input file for tweet data')
-	parser.add_argument('--output', default='../data/outputs/currentEmotion.json', type=str, help='Output file for tweet data')
+# 	parser.add_argument('--input', default='../data/tweets/currentTrend.json', type=str, help='Input file for tweet data')
+# 	parser.add_argument('--output', default='../data/outputs/currentEmotion.json', type=str, help='Output file for tweet data')
+	parser.add_argument('--input', default='data/tweets/currentTrend.json', type=str, help='Input file for tweet data')
+	parser.add_argument('--output', default='data/outputs/currentEmotion.json', type=str, help='Output file for tweet data')
 
-	return parser.parse_args()
+	return parser.parse_args(args=[])
 
-def emotion_analysis():
+def emotion_analysis(args):
 	#モデルの読み込み
-	emotion_analyzer = MLAsk('-d /usr/lib/x86_64-linux-gnu/mecab/dic/mecab-ipadic-neologd')	
+	emotion_analyzer = MLAsk('-d /usr/local/lib/mecab/dic/mecab-ipadic-neologd')	
 
 	#データの読み込み
 	# tweet_data_path = glob.glob('../data/*.json')
@@ -58,14 +61,18 @@ def emotion_analysis():
 	tweet_data = json.load(open(args.input,'r'))
 
 	#分析
-	emotion_dic = tweet_to_emotion(tweet_data, emotion_analyzer)
+	emotion_dic = tweet_to_emotion(tweet_data, emotion_analyzer, args)
 
 	#結果の書き込み
-	os.makedirs("../data/outputs", exist_ok=True)
+	os.makedirs("./data/outputs", exist_ok=True)
 	with open(args.output, 'w') as f:
 		json.dump(emotion_dic, f, ensure_ascii=False)
 
-
-if __name__ == "__main__":
+def main():
+	print("before args")
 	args = get_args()
-	emotion_analysis()
+	print("after args")
+	emotion_analysis(args)
+	
+if __name__ == "__main__":
+	main()
