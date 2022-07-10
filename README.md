@@ -61,7 +61,7 @@ python3 getTrendingTweets.py
 ```
 (補足)
 * 実行する時点で Top10 のトレンドに関するツイートを各々200個取得
-* 取得したツイートは data/currentTrend.json に保存
+* 取得したツイートは data/tweets/currentTrend.json に保存
 * 実行して取得したトレンドはcurrentTrend.jsonに同じトレンドが存在すれば、取得したツイートを同トレンド下に追加
 * currentTrend.jsonは常に最後に実行した時点の Top10 のトレンドしか保存しない
 
