@@ -18,8 +18,8 @@ def remove(str):
 
 def tweet_to_emotion(tweet_data, emotion_analyzer, args):
 	if args.no_emoji:
-# 		emoji_dic = json.load(open("../data/emoji/emoji.json","r"))
-		emoji_dic = json.load(open("data/emoji/emoji.json","r"))
+		emoji_dic = json.load(open("../data/emoji/emoji.json","r"))
+		# emoji_dic = json.load(open("data/emoji/emoji.json","r"))
 		emoji_pattern = re.compile('|'.join(emoji_dic.keys()))
 	emotion_dic = {}
 	for key in tweet_data: #各トレンド
@@ -53,12 +53,12 @@ def get_args():
 
 def emotion_analysis(args):
 	#モデルの読み込み
-	emotion_analyzer = MLAsk('-d /usr/local/lib/mecab/dic/mecab-ipadic-neologd')	
+	emotion_analyzer = MLAsk('-d /usr/local/lib/mecab/dic/mecab-ipadic-neologd')
+	# emotion_analyzer = MLAsk('-d /usr/lib/x86_64-linux-gnu/mecab/dic/mecab-ipadic-neologd') #zetsu検証用
 
 	#データの読み込み
-	# tweet_data_path = glob.glob('../data/*.json')
-	# tweet_data = json.load(open(tweet_data_path[-1],'r'))
 	tweet_data = json.load(open(args.input,'r'))
+	# tweet_data = json.load(open('../data/tweets/exampleTrend.json','r')) #zetsu検証用
 
 	#分析
 	emotion_dic = tweet_to_emotion(tweet_data, emotion_analyzer, args)
@@ -67,6 +67,8 @@ def emotion_analysis(args):
 	os.makedirs("./data/outputs", exist_ok=True)
 	with open(args.output, 'w') as f:
 		json.dump(emotion_dic, f, ensure_ascii=False)
+	# with open('../data/outputs/exampleEmotion_noemoji.json', 'w') as f: #zetsu検証用
+	# 	json.dump(emotion_dic, f, ensure_ascii=False)
 
 def main():
 	print("before args")
