@@ -5,26 +5,57 @@
     <title>Twemotion - {{ name }}の感情分析</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta charset="UTF-8">
-    <title>index.html</title>
-    <link rel="stylesheet" href="{%static 'css/sty.css' %}" type="text/css">
+    <link rel="stylesheet" href="{%static 'css/style.css' %}" type="text/css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1"></script>
+    <script>
+      window.onload = function(){
+        let context = document.querySelector("#emotion_circle").getContext('2d')
+        {% autoescape off %}
+        new Chart(context, {
+          type: 'pie',
+          data: {
+            labels: {{ pie_chart.label }},
+            datasets: [{
+              backgroundColor: {{ pie_chart.color }},
+              data: {{ pie_chart.point}}
+            }]
+          },
+          {% endautoescape %}
+          options: {
+            responsive: false,
+            legend: {
+              display: true,
+              labels: {
+                filter: function(items, chartData) {
+                  return items.text != '無';
+                }
+              }
+            }
+          }
+        });
+      }
+    </script>
   </head>
 
   <body>
-    <a href="http://127.0.0.1:8000/twemotion/"><img src="/media/home.png" alt="ホーム" title="ホーム" style="width:160px" text-align: right></a>
-    <p align="right"><a href={{none_mode.url}} class="btn_none_mode">{{none_mode.alt}}</a></p>
-    <hr>
-    <p class="frame">
-      <b><font size="5">{{ name }}</font></b>
-        {% for em, content in result.items %}
-          <details>
-            <summary><font color={{content.color}}>{{content.japanese}}: {{content.point}} &#037;</font></summary>
-            {% for tweet in content.tweet %}
-              <ul>
-                <li><a href={{tweet.url}}>{{tweet.content}}</a></li>
-              </ul>
-            {% endfor %}
-          </details>
-        {% endfor %}
-    </p>
+    <header id="fixed">
+      <a href="http://127.0.0.1:8000/twemotion/"><img src="{%static 'pic/home.jpg' %}" alt="ホーム" title="ホーム" style="width:80px;"></a>
+    </header>
+    <main>
+      <div class="frame">
+        <b><font size="5">{{ name }}</font></b>
+        <p class="content-tytle">感情分布</p>
+        <center><canvas id="emotion_circle" width="300" height="300"></canvas></center>
+        <p class="content-tytle">該当ツイート</p>
+          {% for em, content in result.items %}
+            <details>
+              <summary><font color={{content.color}}>{{content.japanese}}: {{content.point}} &#037;</font></summary>
+              {% for tweet in content.tweet %}
+                  <p class="tweet-box"><a href={{tweet.url}}>{{tweet.content}}</a></p>
+              {% endfor %}
+            </details>
+          {% endfor %}
+      </p>
+    </main>
   </body>
 </html>

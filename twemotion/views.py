@@ -1,14 +1,15 @@
 #from django.http import HttpResponse
 #from django.template import loader
 from django.shortcuts import render
-from analyze.emotion import main as emotion_analysis
-from analyze.getTrendingTweets import main as get_trend
+#from analyze.emotion import main as emotion_analysis
+#from analyze.getTrendingTweets import main as get_trend
 import json
 import time
 
 
 def index(request):
     #twitterデータ取得＆感情分析
+    """
     with open('twemotion/GetTime.log', 'r') as f_read:
         data = f_read.read()
     GetTime = float(data) if data!="" else 0 #最新取得時刻
@@ -18,6 +19,7 @@ def index(request):
         emotion_analysis()
         with open("twemotion/GetTime.log","w") as f_write: #最新取得時刻を更新
             f_write.write(str(NowTime))
+    """
     
     #感情分析結果を読み込み
     with open("data/outputs/currentEmotion.json", "r") as json_open:
@@ -65,6 +67,13 @@ def trend(request):
     emotion_dic = sorted(emotion_dic.items(), key=lambda x:x[1]["point"], reverse=True) #感情ポイントが多い順にソート
     emotion_dic = {item[0]:item[1] for item in emotion_dic if item[1]["point"]!=0}
     
+    #円グラフ表示に関する辞書
+    pie_chart = {"label":[], "color":[], "point":[]}
+    for k, v in emotion_dic.items():
+        pie_chart["label"].append(v["japanese"])
+        pie_chart["color"].append(v["color"])
+        pie_chart["point"].append(v["point"])
+    
     #None切り替えボタンに関する辞書
     none_mode = {}
     none_mode["url"] = "http://127.0.0.1:8000/twemotion/trend/?t=" + t #埋め込みURL
@@ -72,5 +81,5 @@ def trend(request):
     none_mode["alt"] = "「無」を表示" #altの内容
     none_mode["alt"] += "しない" if none else "する"
     
-    context = {"name":t, "none_mode":none_mode, "result":emotion_dic}
+    context = {"name":t, "none_mode":none_mode, "result":emotion_dic, "pie_chart":pie_chart}
     return render(request, 'twemotion/trend.html', context)
