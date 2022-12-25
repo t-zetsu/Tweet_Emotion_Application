@@ -1,0 +1,69 @@
+ body {
+     font-family: sans-serif;
+     background-image: url("background.jpg");
+}
+
+#fixed {
+    position: sticky; /* 要素の位置を固定する */
+    top: 0; /* 基準の位置を画面の一番上に指定する */
+    left: 0; /* 基準の位置を画面の一番左に指定する */
+    margin: 0; /* 要素の余白を０にする */
+    padding: 10px; /* 要素内側の余白を指定する */
+    height: 50px; /* 高さを指定する */
+    width: 100%; /* 幅を指定する */
+    background: white; /* 背景色を指定する */
+    color:white; /* フォントの色を指定する */
+    border-bottom: 1px solid #d1dce5;
+    z-index: 999;
+}
+
+.frame {
+    padding: 20px;
+    line-height: 200%;
+    font-size: large;
+    background-color: white;
+    border-radius: 10px;
+}
+
+.content-tytle {
+  padding: 10px;
+  border-left: solid 4px blue;
+  border-bottom: solid 4px blue;
+  font-size: x-large;
+  font-weight: bolder;
+}
+
+.btn_none_mode {
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #E6E6E6;
+  text-align: right;
+  text-decoration: none;
+  color: black;
+}
+
+.tweet-box {
+  padding: 10px;
+  border-radius: 8px;
+  background-color: white;
+  border: solid 2px black;
+}
+
+/* TwitterをPCでは横並びにする */
+.flex {
+	display: flex; /* これで横並びになる */
+}
+.twitter-tweet {
+	padding: 5px; /* 1つのツイートの周りに5pxの余白をつける */
+	margin: 10px auto; /* ツイートを中央寄せにする */
+}
+
+/* 画面サイズ960px以下ではTwitterを縦並びに変える */
+@media (max-width: 960px) {
+.flex {
+	display: block; /* 横並びを解除 */
+}
+.twitter-tweet {
+	padding: 0; /* 縦並びでは余白なし */
+}
+}
