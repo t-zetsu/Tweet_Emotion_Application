@@ -33,15 +33,6 @@
   font-weight: bolder;
 }
 
-.btn_none_mode {
-  padding: 10px;
-  border-radius: 5px;
-  background-color: #E6E6E6;
-  text-align: right;
-  text-decoration: none;
-  color: black;
-}
-
 .tweet-box {
   padding: 10px;
   border-radius: 8px;
@@ -51,19 +42,20 @@
 
 /* TwitterをPCでは横並びにする */
 .flex {
-	display: flex; /* これで横並びになる */
+  display: flex; /* これで横並びになる */
+  flex-wrap: wrap;
 }
 .twitter-tweet {
-	padding: 5px; /* 1つのツイートの周りに5pxの余白をつける */
-	margin: 10px auto; /* ツイートを中央寄せにする */
+  padding: 5px; /* 1つのツイートの周りに5pxの余白をつける */
+  margin: 10px auto; /* ツイートを中央寄せにする */
 }
 
 /* 画面サイズ960px以下ではTwitterを縦並びに変える */
 @media (max-width: 960px) {
-.flex {
-	display: block; /* 横並びを解除 */
-}
-.twitter-tweet {
-	padding: 0; /* 縦並びでは余白なし */
-}
+  .flex {
+    display: block; /* 横並びを解除 */
+  }
+  .twitter-tweet {
+    padding: 0; /* 縦並びでは余白なし */
+  }
 }
