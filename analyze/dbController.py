@@ -84,6 +84,10 @@ def main():
 
         emotion = analysis_result[t]
 
+        list = sorted(emotion.items(), key= lambda x: x[1], reverse=True)
+        emotion.clear()
+        emotion.update(list)
+
         print(emotion)
 
         # with open("data/tweets/Trends.json", "r") as Trends_json_open:
@@ -93,7 +97,7 @@ def main():
         #     if str(trend['name']==t):
         #         tweet_volume = str(trend['tweet_volume'])
 
-        insertTrend(t, str(emotion).replace("'", ""), rank)
+        insertTrend(t, str(emotion).replace("'", r"\'"), rank)
 
 if __name__ == "__main__":
     main()

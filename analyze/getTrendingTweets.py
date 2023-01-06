@@ -1,6 +1,7 @@
 import codecs
 import json
 import os
+import time
 import tweepy
 
 #publicすれば削除
@@ -11,7 +12,7 @@ auth = tweepy.OAuth1UserHandler(
     "SM4ByRgeds4pWLJnsIY5fY79NRh0woG07zQBkgnOITY3j"
 )
 
-#publicすればコメントアウトを除去する
+# publicすればコメントアウトを除去する
 # auth = tweepy.OAuth1UserHandler(
 #    consumer_key, consumer_secret, access_token, access_token_secret
 # )
@@ -27,14 +28,18 @@ def getTrends(woeid):
     # トレンドを取得する
     for area, wid in woeid.items():
         trends = api.get_place_trends(wid)[0]
+        # with codecs.open("./data/tweets/Trends.json", 'a', 'utf-8') as file:
+        #     file.seek(0)
+        #     file.truncate()
+        #     dict = json.dump(api.get_place_trends(wid), file, ensure_ascii=False)
 
     return trends
 
 
 def getTweets(keyword, n):
     # tweet responseを取得する
-    print(keyword)
-    tweets = tweepy.Cursor(api.search_tweets, q=keyword,
+    #print(keyword)
+    tweets = tweepy.Cursor(api.search_tweets, q=keyword,count=100,
                            lang='ja', include_entities=True,
                             tweet_mode='extended').items(n)
     return tweets
@@ -63,12 +68,15 @@ def getTrendingTweets():
 
     for keyword in keywords:
         # 各トレンドに対して、tweetを200個取得
-        tweets = getTweets(keyword, 200)
+        kwf = keyword + ' -filter:retweets'
+        tweets = getTweets(kwf, 100)
         # 取得したtweetのテキストとurlをcTに保存
         for tweet in tweets:
             text = str(tweet.full_text)
             tweetid = str(tweet.id)
             url = 'https://twitter.com/x/status/' + tweetid
+            # oembed = api.get_oembed(url)
+            # html = oembed.html
             dict = {'tweet': text, 'url': url}
             cT.setdefault(keyword, []).append(dict)
         # cTとpTの内容を比較し、もし同じトレンドがあればcTにjoin
@@ -78,9 +86,14 @@ def getTrendingTweets():
             if ptext:
                 for tweet in ptext:
                     cT.setdefault(keyword, []).append(tweet)
-
     return cT
 
+
+def getTrendingTweetsByTime(keyword, time): #YYYY-MM-DD
+    tweets = tweepy.Cursor(api.search_tweets, q=keyword,count=10,
+                           lang='ja', include_entities=True,
+                            tweet_mode='extended', until = time).items(10);
+    return tweets
 
 def main():
 
