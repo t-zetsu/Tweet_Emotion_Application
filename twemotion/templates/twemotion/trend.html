@@ -23,14 +23,6 @@
           {% endautoescape %}
           options: {
             responsive: false,
-            legend: {
-              display: true,
-              labels: {
-                filter: function(items, chartData) {
-                  return items.text != '無';
-                }
-              }
-            }
           }
         });
       }
@@ -47,15 +39,19 @@
         <p class="content-tytle">感情分布</p>
         <center><canvas id="emotion_circle" width="300" height="300"></canvas></center>
         <p class="content-tytle">該当ツイート</p>
-          {% for em, content in result.items %}
+          {% for em, content in tweets.items %}
             <details>
-              <summary><font color={{content.color}}>{{content.japanese}}: {{content.point}} &#037;</font></summary>
-              {% for tweet in content.tweet %}
-                  <p class="tweet-box"><a href={{tweet.url}}>{{tweet.content}}</a></p>
-              {% endfor %}
+              <summary><font color={{content.color}}>{{content.label}}: {{content.point}} &#037;</font></summary>
+              <div class="flex">
+                {% for tweet in content.tweet %}
+                  {% autoescape off %}
+                    {{tweet}}
+                  {% endautoescape %}
+                {% endfor %}
+              </div>
             </details>
           {% endfor %}
-      </p>
+      </div>
     </main>
   </body>
 </html>
