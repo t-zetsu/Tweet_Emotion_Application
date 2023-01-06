@@ -1,19 +1,55 @@
 import mysql.connector as mydb
 import json
 import datetime
+import ast
 
 t_delta = datetime.timedelta(hours=9)
 JST = datetime.timezone(t_delta, 'JST')
 now = datetime.datetime.now(JST)
 d = now.strftime('%Y/%m/%d %H:%M:%S')
 
-def insertTrend(trend, emotion, rank):
-    with mydb.connect(
+def connect():
+    db = mydb.connect(
             host="localhost",
             user="root",
             passwd="19971221",
             db="TDataBase",
-            charset="utf8") as db:
+            charset="utf8")
+    return db
+
+def process(res):
+    dict = {}
+    for r in res:
+        date = r[2].strftime('%y/%m/%d %H:%M:%S')
+        emo = ast.literal_eval(r[1])
+        if r[0] not in dict:
+            dict.update({r[0]:{date:[emo,{'rank':r[3]}]}})
+        else : dict[r[0]].update({date:[emo,{'rank':r[3]}]})
+    return dict
+
+
+
+
+def createTable():
+    with connect() as db:
+        table = 'tb_Trends'
+        cuesor = db.cursor()
+        cuesor.execute(
+                """
+                CREATE TABLE IF NOT EXISTS `""" + table +"""` (
+                `trend` varchar(255) NOT NULL,
+                `emotion` varchar(1000) NOT NULL,
+                `subbmission_date` timestamp NOT NULL,
+                `rank` int NOT NULL
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
+                """)
+            
+
+
+def insertTrend(trend, emotion, rank):
+    createTable()
+    with connect() as db:
+
         cuesor = db.cursor()
         values = "('" + d + "','" + trend + "','" + emotion + "'," + str(rank)  + "" ")"
         # print(values)
@@ -22,48 +58,36 @@ def insertTrend(trend, emotion, rank):
         db.commit()
 
 def selectTrendByTime(t1, t2): # str "YYYY-MM-DD hh:mm:ss"
-    with mydb.connect(
-            host="localhost",
-            user="root",
-            passwd="19971221",
-            db="TDataBase",
-            charset="utf8") as db:
+    with connect() as db:
         cursor = db.cursor(buffered=True)
         sql = "SELECT * FROM tb_Trends where subbmission_date between '" + t1 + "' AND '" + t2 + "'"
         # print(sql)
         cursor.execute(sql)
-        result = cursor.fetchall()
+        request = cursor.fetchall()
         cursor.close()
+        result = process(request)
     return result
 
 def selectTrendByRank(rank):  # int 1~10
-    with mydb.connect(
-            host="localhost",
-            user="root",
-            passwd="19971221",
-            db="TDataBase",
-            charset="utf8") as db:
+    with connect() as db:
         cursor = db.cursor(buffered=True)
         sql = "SELECT * FROM tb_Trends where `rank`='" + rank  +"'"
         # print(sql)
         cursor.execute(sql)
-        result = cursor.fetchall()
+        request = cursor.fetchall()
         cursor.close()
+        result = process(request)
     return result
 
 def selectTrendByEmo(emo):  # str 
-    with mydb.connect(
-            host="localhost",
-            user="root",
-            passwd="19971221",
-            db="TDataBase",
-            charset="utf8") as db:
+    with connect() as db:
         cursor = db.cursor(buffered=True)
         sql = "SELECT * FROM tb_Trends where emotion like '{" + emo + "%'";
         # print(sql)
         cursor.execute(sql)
-        result = cursor.fetchall()
+        request = cursor.fetchall()
         cursor.close()
+        result = process(request)
     return result
 
 
