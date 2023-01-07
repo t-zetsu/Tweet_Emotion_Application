@@ -69,7 +69,7 @@ def getTrendingTweets():
     for keyword in keywords:
         # 各トレンドに対して、tweetを200個取得
         kwf = keyword + ' -filter:retweets'
-        tweets = getTweets(kwf, 100)
+        tweets = getTweets(kwf, 200)
         # 取得したtweetのテキストとurlをcTに保存
         for tweet in tweets:
             text = str(tweet.full_text)

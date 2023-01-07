@@ -91,8 +91,6 @@ def selectTrendByEmo(emo):  # str
     return result
 
 
-
-
 def main():
 
     with open("data/outputs/processedEmotion_trend.json", "r") as analysis_json_open:
