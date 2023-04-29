@@ -18,7 +18,7 @@ def remove(str):
 
 def tweet_to_emotion(tweet_data, emotion_analyzer, args):
 	if args.no_emoji:
-		emoji_dic = json.load(open("../data/emoji/emoji.json","r"))
+		emoji_dic = json.load(open("./data/emoji/emoji.json","r"))
 		# emoji_dic = json.load(open("data/emoji/emoji.json","r"))
 		emoji_pattern = re.compile('|'.join(emoji_dic.keys()))
 	emotion_dic = {}

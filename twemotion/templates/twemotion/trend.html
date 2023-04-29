@@ -32,6 +32,7 @@
   <body>
     <header id="fixed">
       <a href="http://127.0.0.1:8000/twemotion/"><img src="{%static 'pic/home.jpg' %}" alt="ホーム" title="ホーム" style="width:80px;"></a>
+      <p align="right"><a href={{none_mode.url}} class="btn_none_mode">{{none_mode.alt}}</a></p>
     </header>
     <main>
       <div class="frame">
@@ -39,7 +40,7 @@
         <p class="content-tytle">感情分布</p>
         <center><canvas id="emotion_circle" width="300" height="300"></canvas></center>
         <p class="content-tytle">該当ツイート</p>
-          {% for em, content in tweets.items %}
+          <!-- {% for em, content in tweets.items %}
             <details>
               <summary><font color={{content.color}}>{{content.label}}: {{content.point}} &#037;</font></summary>
               <div class="flex">
@@ -50,8 +51,53 @@
                 {% endfor %}
               </div>
             </details>
-          {% endfor %}
+          {% endfor %} -->
+          {% for em, content in tweets.items %}
+          <details>
+            <summary><font color={{content.color}}>{{content.japanese}}: {{content.point}} &#037;</font></summary>
+            {% for tweet in content.tweet %}
+              <ul>
+                <li><a href={{tweet.url}}>{{tweet.content}}</a></li>
+              </ul>
+            {% endfor %}
+          </details>
+        {% endfor %}
       </div>
     </main>
   </body>
 </html>
+
+
+<!-- -------------------------------------------------------------------------------- -->
+
+
+<!-- {% load static %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Twemotion - {{ name }}の感情分析</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <title>index.html</title>
+    <link rel="stylesheet" href="{%static 'css/sty.css' %}" type="text/css">
+  </head>
+
+  <body>
+    <a href="http://127.0.0.1:8000/twemotion/"><img src="/static/pic/home.jpg" alt="ホーム" title="ホーム" style="width:160px" text-align: right></a>
+    <p align="right"><a href={{none_mode.url}} class="btn_none_mode">{{none_mode.alt}}</a></p>
+    <hr>
+    <p class="frame">
+      <b><font size="5">{{ name }}</font></b>
+        {% for em, content in result.items %}
+          <details>
+            <summary><font color={{content.color}}>{{content.japanese}}: {{content.point}} &#037;</font></summary>
+            {% for tweet in content.tweet %}
+              <ul>
+                <li><a href={{tweet.url}}>{{tweet.content}}</a></li>
+              </ul>
+            {% endfor %}
+          </details>
+        {% endfor %}
+    </p>
+  </body>
+</html> -->
